@@ -52,3 +52,45 @@ export const ButtonText = styled.Text`
   text-align: center;
   font-size: 22px;
 `;
+
+export const Box = styled.View`
+  flex: 1;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+`;
+
+export const BoxBody = styled.View`
+  height: 35%;
+  width: 85%;
+  background-color: #fff;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const BoxTitle = styled.Text`
+  font-size: 18px;
+  font-weight: bold;
+  color: #a303c3;
+`;
+
+export const BoxInput = styled.TextInput`
+  margin-top: 15px;
+  background-color: #ccc;
+  width: 50%;
+  height: 50px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+`;
+
+export const BoxButton = styled.TouchableHighlight`
+  padding-top: 20px;
+`;
+
+export const BoxText = styled.Text`
+  font-size: 15px;
+  color: #a303c3;
+`;
