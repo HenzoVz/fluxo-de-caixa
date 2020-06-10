@@ -2,15 +2,19 @@ import styled from 'styled-components/native';
 
 export const Container = styled.SafeAreaView`
   flex: 1;
+  justify-content: center;
+  align-items: center;
+  background-color: #000;
 `;
 
 export const AreaSaldo = styled.View`
+  width: 100%;
   padding-top: 30px;
   padding-bottom: 20px;
   background-color: #a303c3;
 `;
 
-export const Saldo =  styled.Text`
+export const Saldo = styled.Text`
   text-align: center;
   color: #fff;
   font-size: 30px;
@@ -93,4 +97,26 @@ export const BoxButton = styled.TouchableHighlight`
 export const BoxText = styled.Text`
   font-size: 15px;
   color: #a303c3;
+`;
+
+export const AreaHistorico = styled.View`
+  padding: 5px;
+  width: 100%;
+  background-color: #ddd;
+  align-items: flex-end;
+  justify-content: space-around;
+  flex-direction: row;
+`;
+
+export const TextHistorico = styled.Text`
+  justify-content: center;
+  font-size: 25px;
+  padding-right: 5px;
+`;
+
+export const AreaTest = styled.View`
+  flex: 1;
+  margin-top: 10%;
+  margin-bottom: 82%;
+  background-color: red;
 `;

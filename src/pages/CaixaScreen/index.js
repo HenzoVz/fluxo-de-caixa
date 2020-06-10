@@ -1,11 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {
-  Text,
-  Flatlist,
-  TouchableWithoutFeedback,
-  Modal,
-  Platform,
-} from 'react-native';
+import React, {useEffect, useState, useCallback} from 'react';
+import {Text, FlatList, TouchableWithoutFeedback, Modal} from 'react-native';
 import {
   Container,
   AreaSaldo,
@@ -21,7 +15,11 @@ import {
   BoxInput,
   BoxButton,
   BoxText,
+  AreaHistorico,
+  TextHistorico,
+  AreaTest,
 } from './styles';
+
 import {useNavigation} from '@react-navigation/native';
 import firebase from '../../FirebaseConnection';
 
@@ -35,20 +33,32 @@ export default () => {
 
   const navigation = useNavigation();
 
-  firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-      firebase
-        .database()
-        .ref('users')
-        .child(user.uid)
-        .on('value', (snapshot) => {
-          let auxSaldo = snapshot.val().saldo;
-          setSaldo(auxSaldo);
-        });
-    } else {
-      navigation.navigate('Home');
+  useEffect(() => {
+    async function handleGetData() {
+      const user = firebase.auth().currentUser;
+
+      console.log(user?.uid);
+      if (user) {
+        await firebase
+          .database()
+          .ref('users')
+          .child(user.uid)
+          .on('value', (snapshot) => {
+            let auxSaldo = snapshot.val().saldo;
+            setSaldo(auxSaldo);
+          });
+
+        /*
+
+            */
+      } else {
+        navigation.navigate('Home');
+      }
     }
-  });
+
+    handleGetData();
+    handleGetHistory();
+  }, []);
 
   function handleClickReceita() {
     setModalVisible(true);
@@ -78,11 +88,16 @@ export default () => {
 
       let key = historico.push().key;
 
-      historico.child(key).set({
-        type: 'receita',
-        valor: receita,
-        date: getCurrentDate(),
-      });
+      historico
+        .child(key)
+        .set({
+          type: 'receita',
+          valor: receita,
+          date: getCurrentDate(),
+        })
+        .then(() => {
+          handleGetHistory();
+        });
 
       user.once('value').then((snapshot) => {
         let auxSaldo = parseFloat(snapshot.val().saldo);
@@ -111,11 +126,16 @@ export default () => {
 
       let key = historico.push().key;
 
-      historico.child(key).set({
-        type: 'despesa',
-        valor: despesa,
-        date: getCurrentDate(),
-      });
+      historico
+        .child(key)
+        .set({
+          type: 'despesa',
+          valor: despesa,
+          date: getCurrentDate(),
+        })
+        .then(() => {
+          handleGetHistory();
+        });
 
       user.once('value').then((snapshot) => {
         let auxSaldo = parseFloat(snapshot.val().saldo);
@@ -130,13 +150,28 @@ export default () => {
     }
   }
 
-  useEffect(() => {
-    return () => {
-      handleClickReceita;
-      handleClickDespesa;
-    };
+  const handleGetHistory = useCallback(async () => {
+    const user = firebase.auth().currentUser;
+    await firebase
+      .database()
+      .ref('historico')
+      .child(user.uid)
+      .once('value', (snapshot) => {
+        let auxHistorico = [];
+
+        snapshot.forEach((childItem) => {
+          auxHistorico.push({
+            key: childItem.key,
+            date: childItem.val().date,
+            type: childItem.val().type,
+            valor: childItem.val().valor,
+          });
+        });
+        setHistorico(auxHistorico);
+      });
   }, []);
 
+  console.log(historico);
   return (
     <Container>
       <Modal
@@ -187,6 +222,21 @@ export default () => {
       <AreaSaldo>
         <Saldo>Saldo R$ {saldo}</Saldo>
       </AreaSaldo>
+      <AreaTest>
+        <Text>..........</Text>
+      </AreaTest>
+      <AreaHistorico>
+        <FlatList
+          data={historico}
+          renderItem={({item, index}) => (
+            <TextHistorico>
+              {item.type.toUpperCase()}: R${item.valor},
+            </TextHistorico>
+          )}
+          keyExtractor={(item, index) => item.key}
+          horizontal={true}
+        />
+      </AreaHistorico>
       <ButtonArea>
         <Button onPress={handleClickReceita}>
           <ButtonText>Receita</ButtonText>
