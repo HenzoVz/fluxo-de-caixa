@@ -2,9 +2,7 @@ import styled from 'styled-components/native';
 
 export const Container = styled.SafeAreaView`
   flex: 1;
-  justify-content: center;
-  align-items: center;
-  background-color: #000;
+  background-color: #fff;
 `;
 
 export const AreaSaldo = styled.View`
@@ -99,24 +97,32 @@ export const BoxText = styled.Text`
   color: #a303c3;
 `;
 
+export const ContainerItemns = styled.View`
+  flex: 10;
+  background-color: #ccc;
+`;
+
+export const AreaGraph = styled.View`
+  flex: 1;
+  background-color: pink;
+`;
+
 export const AreaHistorico = styled.View`
-  padding: 5px;
-  width: 100%;
-  background-color: #ddd;
-  align-items: flex-end;
-  justify-content: space-around;
+  flex: 1;
   flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
 `;
 
 export const TextHistorico = styled.Text`
-  justify-content: center;
-  font-size: 25px;
-  padding-right: 5px;
+  font-size: 18px;
 `;
 
-export const AreaTest = styled.View`
-  flex: 1;
-  margin-top: 10%;
-  margin-bottom: 82%;
-  background-color: red;
+export const Area = styled.View`
+  padding: 4px;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+  background-color: #fff;
 `;

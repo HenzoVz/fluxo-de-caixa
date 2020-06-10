@@ -1,5 +1,11 @@
 import React, {useEffect, useState, useCallback} from 'react';
-import {Text, FlatList, TouchableWithoutFeedback, Modal} from 'react-native';
+import {
+  Text,
+  FlatList,
+  TouchableWithoutFeedback,
+  Modal,
+  ScrollView,
+} from 'react-native';
 import {
   Container,
   AreaSaldo,
@@ -15,9 +21,11 @@ import {
   BoxInput,
   BoxButton,
   BoxText,
-  AreaHistorico,
+  ContainerItemns,
+  Area,
+  AreaGraph,
   TextHistorico,
-  AreaTest,
+  AreaHistorico,
 } from './styles';
 
 import {useNavigation} from '@react-navigation/native';
@@ -47,10 +55,6 @@ export default () => {
             let auxSaldo = snapshot.val().saldo;
             setSaldo(auxSaldo);
           });
-
-        /*
-
-            */
       } else {
         navigation.navigate('Home');
       }
@@ -171,7 +175,6 @@ export default () => {
       });
   }, []);
 
-  console.log(historico);
   return (
     <Container>
       <Modal
@@ -222,21 +225,40 @@ export default () => {
       <AreaSaldo>
         <Saldo>Saldo R$ {saldo}</Saldo>
       </AreaSaldo>
-      <AreaTest>
-        <Text>..........</Text>
-      </AreaTest>
-      <AreaHistorico>
-        <FlatList
-          data={historico}
-          renderItem={({item, index}) => (
-            <TextHistorico>
-              {item.type.toUpperCase()}: R${item.valor},
-            </TextHistorico>
-          )}
-          keyExtractor={(item, index) => item.key}
+      <ContainerItemns>
+        <ScrollView
           horizontal={true}
-        />
-      </AreaHistorico>
+          contentContainerStyle={{width: `${200}%`}}
+          showsHorizontalScrollIndicator={false}
+          scrollEventThrottle={200}
+          decelerationRate="fast"
+          pagingEnabled>
+          <AreaGraph>
+            <Text>.....</Text>
+          </AreaGraph>
+          <AreaHistorico>
+            <FlatList
+              data={historico}
+              renderItem={({item, index}) => (
+                <Area>
+                  <TextHistorico>{item.date}</TextHistorico>
+                  {item.type == 'receita' ? (
+                    <TextHistorico style={{color: 'green'}}>
+                      {item.type.toUpperCase()}
+                    </TextHistorico>
+                  ) : (
+                    <TextHistorico style={{color: 'red'}}>
+                      {item.type.toUpperCase()}
+                    </TextHistorico>
+                  )}
+                  <TextHistorico>R$ {item.valor}</TextHistorico>
+                </Area>
+              )}
+              keyExtractor={(item) => item.key}
+            />
+          </AreaHistorico>
+        </ScrollView>
+      </ContainerItemns>
       <ButtonArea>
         <Button onPress={handleClickReceita}>
           <ButtonText>Receita</ButtonText>
