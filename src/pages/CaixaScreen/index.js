@@ -223,7 +223,7 @@ export default () => {
         </TouchableWithoutFeedback>
       </Modal>
       <AreaSaldo>
-        <Saldo>Saldo R$ {saldo}</Saldo>
+        <Saldo>Saldo R$ {saldo.toFixed(2)}</Saldo>
       </AreaSaldo>
       <ContainerItemns>
         <ScrollView
@@ -251,7 +251,9 @@ export default () => {
                       {item.type.toUpperCase()}
                     </TextHistorico>
                   )}
-                  <TextHistorico>R$ {item.valor}</TextHistorico>
+                  <TextHistorico>
+                    R$ {parseFloat(item.valor).toFixed(2)}
+                  </TextHistorico>
                 </Area>
               )}
               keyExtractor={(item) => item.key}

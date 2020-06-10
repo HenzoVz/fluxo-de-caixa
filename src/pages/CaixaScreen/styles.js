@@ -117,6 +117,9 @@ export const AreaHistorico = styled.View`
 
 export const TextHistorico = styled.Text`
   font-size: 18px;
+  text-align: center;
+  align-items: center;
+  justify-content: flex-start;
 `;
 
 export const Area = styled.View`
