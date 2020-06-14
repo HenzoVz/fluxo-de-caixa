@@ -1,6 +1,6 @@
 import React, {useEffect, useState, useCallback} from 'react';
 import {
-  Text,
+  Dimensions,
   FlatList,
   TouchableWithoutFeedback,
   Modal,
@@ -30,6 +30,8 @@ import {
 
 import {useNavigation} from '@react-navigation/native';
 import firebase from '../../FirebaseConnection';
+import {PieChart} from 'react-native-chart-kit';
+import Svg, {Path} from 'react-native-svg';
 
 export default () => {
   const [saldo, setSaldo] = useState(0);
@@ -40,6 +42,49 @@ export default () => {
   const [monitor, setMonitor] = useState('');
 
   const navigation = useNavigation();
+
+  const screenWidth = Dimensions.get('window').width;
+
+  const chartConfig = {
+    backgroundGradientFrom: '#1E2923',
+    backgroundGradientFromOpacity: 0,
+    backgroundGradientTo: '#08130D',
+    backgroundGradientToOpacity: 0.5,
+    color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+    strokeWidth: 2, // optional, default 3
+    barPercentage: 0.5,
+    useShadowColorFromDataset: false, // optional
+  };
+
+  let histReceita = historico.filter((item) => item.type === 'receita');
+  let histDespesa = historico.filter((item) => item.type === 'despesa');
+
+  let histReceitaTotal = histReceita
+    .map((e, i) => parseFloat(e.valor))
+    .reduce((a, b) => a + b, 0)
+    .toFixed(2);
+
+  let histDespesaTotal = histDespesa
+    .map((e, i) => parseFloat(e.valor))
+    .reduce((a, b) => a + b, 0)
+    .toFixed(2);
+
+  const data = [
+    {
+      name: 'Receita',
+      population: Math.round(histReceitaTotal),
+      color: 'green',
+      legendFontColor: '#7F7F7F',
+      legendFontSize: 18,
+    },
+    {
+      name: 'Despesa',
+      population: Math.round(histDespesaTotal),
+      color: 'red',
+      legendFontColor: '#7F7F7F',
+      legendFontSize: 18,
+    },
+  ];
 
   useEffect(() => {
     async function handleGetData() {
@@ -234,7 +279,16 @@ export default () => {
           decelerationRate="fast"
           pagingEnabled>
           <AreaGraph>
-            <Text>.....</Text>
+            <PieChart
+              data={data}
+              width={screenWidth}
+              height={220}
+              chartConfig={chartConfig}
+              accessor="population"
+              backgroundColor="transparent"
+              paddingLeft="15"
+              absolute
+            />
           </AreaGraph>
           <AreaHistorico>
             <FlatList

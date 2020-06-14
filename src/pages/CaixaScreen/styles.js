@@ -104,7 +104,8 @@ export const ContainerItemns = styled.View`
 
 export const AreaGraph = styled.View`
   flex: 1;
-  background-color: pink;
+  justify-content: center;
+  background-color: #fff;
 `;
 
 export const AreaHistorico = styled.View`
