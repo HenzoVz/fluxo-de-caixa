@@ -1,10 +1,12 @@
 import React, {useEffect, useState, useCallback} from 'react';
 import {
+  Text,
   Dimensions,
   FlatList,
   TouchableWithoutFeedback,
   Modal,
   ScrollView,
+  View,
 } from 'react-native';
 import {
   Container,
@@ -31,7 +33,6 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import firebase from '../../FirebaseConnection';
 import {PieChart} from 'react-native-chart-kit';
-import Svg, {Path} from 'react-native-svg';
 
 export default () => {
   const [saldo, setSaldo] = useState(0);
@@ -51,9 +52,10 @@ export default () => {
     backgroundGradientTo: '#08130D',
     backgroundGradientToOpacity: 0.5,
     color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-    strokeWidth: 2, // optional, default 3
+    strokeWidth: 2,
     barPercentage: 0.5,
-    useShadowColorFromDataset: false, // optional
+    useShadowColorFromDataset: false,
+    decimalPlaces: 3,
   };
 
   let histReceita = historico.filter((item) => item.type === 'receita');
@@ -294,21 +296,25 @@ export default () => {
             <FlatList
               data={historico}
               renderItem={({item, index}) => (
-                <Area>
-                  <TextHistorico>{item.date}</TextHistorico>
-                  {item.type == 'receita' ? (
-                    <TextHistorico style={{color: 'green'}}>
-                      {item.type.toUpperCase()}
+                <>
+                  <View style={{backgroundColor: '#eee'}}>
+                    <TextHistorico>{item.date}</TextHistorico>
+                  </View>
+                  <Area>
+                    {item.type == 'receita' ? (
+                      <TextHistorico style={{color: 'green'}}>
+                        {item.type.toUpperCase()}
+                      </TextHistorico>
+                    ) : (
+                      <TextHistorico style={{color: 'red'}}>
+                        {item.type.toUpperCase()}
+                      </TextHistorico>
+                    )}
+                    <TextHistorico>
+                      R$ {parseFloat(item.valor).toFixed(2)}
                     </TextHistorico>
-                  ) : (
-                    <TextHistorico style={{color: 'red'}}>
-                      {item.type.toUpperCase()}
-                    </TextHistorico>
-                  )}
-                  <TextHistorico>
-                    R$ {parseFloat(item.valor).toFixed(2)}
-                  </TextHistorico>
-                </Area>
+                  </Area>
+                </>
               )}
               keyExtractor={(item) => item.key}
             />
