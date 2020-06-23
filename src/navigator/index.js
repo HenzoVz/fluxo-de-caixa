@@ -2,6 +2,7 @@ import 'react-native-gesture-handler';
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+import '../config/StatusBarConfig';
 import Home from '../pages/HomeScreen/index';
 import Preload from '../pages/PreloadScreen/index';
 import Cadastro from '../pages/CadastroScreen/index';

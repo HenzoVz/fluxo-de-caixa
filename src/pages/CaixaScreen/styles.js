@@ -65,7 +65,7 @@ export const Box = styled.View`
 `;
 
 export const BoxBody = styled.View`
-  height: 35%;
+  height: 45%;
   width: 85%;
   background-color: #fff;
   justify-content: center;
